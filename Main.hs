@@ -26,7 +26,10 @@ main = do
       env <- mkQueryEnv proj dist_dir
       units <- runQuery (allUnits id) env
       case (getFlags file_dir $ toList units) of
-        Just fs -> mapM_ putStr (intersperse " " $ fs++[file]) >> putStrLn ""
+        Just fs -> mapM_ putStr (showForSh $ fs++[file]) >> putStrLn ""
+
+showForSh :: [String] -> [String]
+showForSh = intersperse " " . map (\x -> "'"++x++"'")
 
 getFlags :: FilePath -> [UnitInfo] -> Maybe [String]
 getFlags dir uis
